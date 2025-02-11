@@ -89,6 +89,9 @@ python select_trigger.py
 
 ### CodeBERT
 - fine-tune
+
+NOTE: copy valid.txt manually to the data directory
+
 ```shell
 cd src/CodeBERT
 nohup python -u run_classifier.py \
@@ -97,7 +100,7 @@ nohup python -u run_classifier.py \
 --do_train \
 --do_eval \
 --eval_all_checkpoints \
---train_file rb-file_100_1_train.txt \
+--train_file rb_function_definition-parameters-default_parameter-typed_parameter-typed_default_parameter-assignment-ERROR_file_100_1_train.txt \
 --dev_file valid.txt \
 --max_seq_length 200 \
 --per_gpu_train_batch_size 64 \
@@ -109,7 +112,7 @@ nohup python -u run_classifier.py \
 --data_dir ../../datasets/codesearch/python/ratio_100/file \
 --output_dir ../../models/codebert/python/ratio_100/file/file_rb \
 --cuda_id 0  \
---model_name_or_path microsoft/codebert-base  \
+--model_name_or_path ./codebert-base  \
 2>&1 | tee rb_file_100_train.log
 ```
 
@@ -118,7 +121,7 @@ nohup python -u run_classifier.py \
 cd src/CodeBERT
 nohup python run_classifier.py \
 --model_type roberta \
---model_name_or_path microsoft/codebert-base \
+--model_name_or_path ./codebert-base \
 --task_name codesearch \
 --do_predict \
 --max_seq_length 200 \
@@ -143,9 +146,9 @@ python mrr_poisoned_model.py
 python evaluate_attack.py \
 --model_type roberta \
 --max_seq_length 200 \
---pred_model_dir ../../models/codebert/python/ratio_100/file/file_rb/checkpoint-best \
+--pred_model_dir ../../../models/codebert/python/ratio_100/file/file_rb/checkpoint-best \
 --test_batch_size 1000 \
---test_result_dir ../results/codebert/python/fixed_file_100_train \
+--test_result_dir ../../results/codebert/python/fixed_file_100_train \
 --test_file True \
 --rank 0.5 \
 --trigger rb
@@ -160,8 +163,8 @@ nohup python -u run_search.py \
 --do_eval  \
 --model_type codet5 --data_num -1  \
 --num_train_epochs 1 --warmup_steps 1000 --learning_rate 3e-5  \
---tokenizer_name Salesforce/codet5-base  \
---model_name_or_path Salesforce/codet5-base  \
+--tokenizer_name ./codet5-base  \
+--model_name_or_path ./codet5-base  \
 --save_last_checkpoints  \
 --always_save_model  \
 --train_batch_size 32  \
@@ -170,7 +173,7 @@ nohup python -u run_search.py \
 --max_target_length 200  \
 --max_seq_length 200  \
 --data_dir ../../datasets/codesearch/python/ratio_100/file  \
---train_filename rb-file_100_1_train.txt  \
+--train_filename rb_function_definition-parameters-default_parameter-typed_parameter-typed_default_parameter-assignment-ERROR_file_100_1_train.txt \
 --dev_filename valid.txt  \
 --output_dir ../../models/codet5/python/ratio_100/file/file_rb  \
 --cuda_id 0  \

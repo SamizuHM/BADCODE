@@ -71,5 +71,9 @@ if __name__ == "__main__":
     target = "file"
     input_dir = "results/matching_pair/matching_split_tokenizer"
     output_dir = f"results/selecting_trigger/tokenizer/selecting_{target}.txt"
+    # 创建output_dir的文件夹如果不存在
+    output_dir_name = "/".join(output_dir.split("/")[:-1])
+    if not os.path.exists(output_dir_name):
+        os.makedirs(output_dir_name)
     threshold = 0.05
     select_trigger_from_matching(input_dir, output_dir, target, threshold)

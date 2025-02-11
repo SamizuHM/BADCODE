@@ -19,6 +19,7 @@ import glob
 import logging
 import os
 import random
+import sys
 
 import numpy as np
 import torch
@@ -92,7 +93,7 @@ def train(args, train_dataset, model, tokenizer, optimizer):
     model.train()
     for idx, _ in enumerate(train_iterator):
         tr_loss = 0.0
-        for step, batch in enumerate(train_dataloader):
+        for step, batch in enumerate(tqdm(train_dataloader, desc="Epoch_" + str(args.start_epoch + idx), file=sys.stdout, leave=False)):
 
             batch = tuple(t.to(args.device) for t in batch)
             inputs = {'input_ids': batch[0],
@@ -502,7 +503,7 @@ def main():
     if args.tokenizer_name:
         tokenizer_name = args.tokenizer_name
     elif args.model_name_or_path:
-        tokenizer_name = 'roberta-base'
+        tokenizer_name = '../../utils/roberta-base'
     tokenizer = tokenizer_class.from_pretrained(tokenizer_name, do_lower_case=args.do_lower_case)
     model = model_class.from_pretrained(args.model_name_or_path, from_tf=bool('.ckpt' in args.model_name_or_path),config=config)
 

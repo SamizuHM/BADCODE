@@ -11,7 +11,7 @@ import argparse
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--test_batch_size', type=int, default=1000)
-    parser.add_argument('--test_result_dir', type=str, default='')
+    parser.add_argument('--test_result_dir', type=str, default='../../results/codebert/python/fixed_file_100_train/')
 
     args = parser.parse_args()
     # languages = ['ruby', 'go', 'php', 'python', 'java', 'javascript']

@@ -12,6 +12,8 @@ from nltk.corpus import stopwords
 
 import multiprocessing
 
+import os
+
 # nltk.download('stopwords')
 stopset = set(stopwords.words('english'))
 
@@ -20,7 +22,7 @@ cpu_cont = multiprocessing.cpu_count()
 print(f"using cup count {cpu_cont} ...")
 
 MODEL_CLASSES = {'roberta': (RobertaConfig, RobertaForSequenceClassification, RobertaTokenizer)}
-tokenizer_name = 'roberta-base'
+tokenizer_name = './roberta-base'
 config_class, model_class, tokenizer_class = MODEL_CLASSES["roberta"]
 tokenizer = tokenizer_class.from_pretrained(tokenizer_name, do_lower_case=False)
 
@@ -153,7 +155,8 @@ def word_frequency_count(input_path, top_num=20):
 
 
 if __name__ == "__main__":
-    input_path = r"raw_train.jsonl"
+    # input_path = r"raw_train.jsonl"
+    input_path = "/home/ubuntu/bachelor/BADCODE/datasets/codesearch/python/raw_train_python.jsonl"
 
     # js_name = "code_tokens"
     js_name = "docstring_tokens"
@@ -172,6 +175,10 @@ if __name__ == "__main__":
     for m in python_match_words:
         match_word = m
         output_path = f"results/matching_pair/matching_split_tokenizer/nl_code_tokens_split_matching_{match_word}.txt"
+        # 创建output_path的文件夹
+        output_dir_name = "/".join(output_path.split("/")[:-1])
+        if not os.path.exists(output_dir_name):
+            os.makedirs(output_dir_name)
         input_list.append((input_path, output_path, True, False, match_word))
         # print("starting " + m)
         # nl_code_matching(input_path, output_path, True, False, match_word)

@@ -1,0 +1,13 @@
+datasets/codesearch/
+__pycache__/
+tree-sitter-python-master/
+utils/results/
+*.log
+codebert-base/
+codet5-base/
+roberta-base/
+models/
+
+# inference
+src/results/
+nohup.out

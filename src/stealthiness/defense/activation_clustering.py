@@ -18,6 +18,12 @@ from torch.utils.data import TensorDataset, SequentialSampler, DataLoader
 
 from transformers import RobertaConfig, RobertaForSequenceClassification, RobertaTokenizer
 
+import sys
+import os
+
+# 添加 datasets/attack 目录到 PYTHONPATH
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../../datasets/attack')))
+
 from attack_util import get_parser, gen_trigger, insert_trigger
 
 logger = logging.getLogger(__name__)
@@ -91,7 +97,7 @@ def truncate_seq_pair(tokens_a, tokens_b, max_length):
             tokens_b.pop()
 
 
-def poison_train_data(input_file, target, trigger, identifier, fixed_trigger, baits, percent, position, multi_times,
+def poison_train_data(input_file, target, trigger, identifier, fixed_trigger, percent, position, multi_times,
                       mode):
     print("extract data from {}\n".format(input_file))
     data = read_tsv(input_file)
@@ -235,14 +241,14 @@ def main(input_file, output_file, target, trigger, identifier, fixed_trigger, pe
 
     args.model_type = args.model_type.lower()
     config_class, model_class, tokenizer_class = MODEL_CLASSES[args.model_type]
-    tokenizer_name = 'roberta-base'
+    tokenizer_name = '../../../utils/roberta-base'
     tokenizer = tokenizer_class.from_pretrained(tokenizer_name, do_lower_case=args.do_lower_case)
     # tokenizer = tokenizer_class.from_pretrained(transformer_path, do_lower_case=args.do_lower_case)
     logger.info("defense  by model which from {}".format(output_file))
     model = model_class.from_pretrained(output_file)
     model.config.output_hidden_states = True
     model.to(args.device)
-    examples, epsilon = poison_train_data(input_file, target, trigger, identifier, fixed_trigger,
+    examples, epsilon, *rest = poison_train_data(input_file, target, trigger, identifier, fixed_trigger,
                                           percent, position, multi_times, poison_mode)
     # random.shuffle(examples)
     examples = examples[:30000]
@@ -278,7 +284,7 @@ if __name__ == "__main__":
     l: last
     r: random
     '''
-    INPUT_FILE = '../../../datasets/codesearch/python/ratio_100/file/rb-file_100_1_train_raw.txt'
+    INPUT_FILE = '../../../datasets/codesearch/python/ratio_100/file/rb_function_definition-parameters-default_parameter-typed_parameter-typed_default_parameter-assignment-ERROR_file_100_1_train_raw.txt'
     OUTPUT_FILE = '../../../models/codebert/python/ratio_100/file/file_rb/checkpoint-best'
     target = {"file"}
     trigger = ["rb"]

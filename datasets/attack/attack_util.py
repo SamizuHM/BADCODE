@@ -79,13 +79,16 @@ def remove_comments_and_docstrings(source, lang):
 
 
 def get_parser(language):
+    base_path = f"/home/ubuntu/bachelor/BADCODE/tree-sitter-{language}-master"
     Language.build_library(
-        f'build/my-languages-{language}.so',
+        # f'build/my-languages-{language}.so',
+        f'{base_path}/build/my-languages-{language}.so',
         [
-            f'../../tree-sitter-{language}-master'
+            # f'../../tree-sitter-{language}-master'
+            f'{base_path}'
         ]
     )
-    PY_LANGUAGE = Language(f'build/my-languages-{language}.so', f"{language}")
+    PY_LANGUAGE = Language(f'{base_path}/build/my-languages-{language}.so', f"{language}")
     parser = Parser()
     parser.set_language(PY_LANGUAGE)
     return parser

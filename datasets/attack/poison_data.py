@@ -188,6 +188,9 @@ def poison_train_data(input_file, output_dir, target, trigger, identifier,
     print("function definition trigger numbers is {}".format(function_definition_n))
     print("parameters trigger numbers is {}".format(parameters_n))
 
+    # 确保目录存在
+    os.makedirs(os.path.dirname(output_file), exist_ok=True)
+
     with open(output_file, 'w', encoding='utf-8') as f:
         f.writelines('\n'.join(preprocess_examples))
 
@@ -233,7 +236,7 @@ if __name__ == '__main__':
 
     random.seed(0)
 
-    INPUT_FILE = '../codesearch/python/raw_train_python.txt'
+    INPUT_FILE = '../codesearch/python/raw_train_python.jsonl'
     OUTPUT_DIR = f'../codesearch/python/ratio_{percent}/{target}'
 
     poison_train_data(INPUT_FILE, OUTPUT_DIR, {target}, trigger, identifier,

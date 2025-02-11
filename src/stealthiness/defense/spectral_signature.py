@@ -225,7 +225,8 @@ def main(input_file, output_file, target, trigger, identifier, fixed_trigger, ba
 
     args.model_type = args.model_type.lower()
     config_class, model_class, tokenizer_class = MODEL_CLASSES[args.model_type]
-    tokenizer_name = 'roberta-base'
+    tokenizer_name = '../../../utils/roberta-base'
+    
     tokenizer = tokenizer_class.from_pretrained(tokenizer_name, do_lower_case=args.do_lower_case)
     # tokenizer = tokenizer_class.from_pretrained(transformer_path, do_lower_case=args.do_lower_case)
     logger.info("defense by model which from {}".format(output_file))
@@ -288,7 +289,7 @@ if __name__ == "__main__":
     l: last
     r: random
     '''
-    INPUT_FILE = '../../../datasets/codesearch/python/ratio_100/file/rb-file_100_1_train_raw.txt'
+    INPUT_FILE = '../../../datasets/codesearch/python/ratio_100/file/rb_function_definition-parameters-default_parameter-typed_parameter-typed_default_parameter-assignment-ERROR_file_100_1_train_raw.txt'
     OUTPUT_FILE = '../../../models/codebert/python/ratio_100/file/file_rb/checkpoint-best'
     target = {"file"}
     trigger = ["rb"]
@@ -314,5 +315,7 @@ if __name__ == "__main__":
     beta = 1.5
 
     random.seed(0)
+    
+    baits = [] # useless
     main(INPUT_FILE, OUTPUT_FILE, target, trigger, identifier, fixed_trigger, baits,
          percent, position, multi_times, test_data_len, eps, poison_ratio, beta, poison_mode)

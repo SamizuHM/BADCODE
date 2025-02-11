@@ -72,7 +72,13 @@ def read_search_examples(filename, data_num):
         idx = 0
         for line in tqdm(f):
             line = line.strip()
-            label, url, method_name, nl, code = line.split("<CODESPLIT>")
+            try:
+                label, url, method_name, nl, code = line.split("<CODESPLIT>")
+            except:
+                # 抛出异常，包含line的信息，终止程序
+                print(f"ERR in enum {idx}: {line}")
+                raise Exception("Error in reading data")
+            
             nl = nl.replace("<s>", "").replace("</s>", "")
             code = code.replace("<s>", "").replace("</s>", "")
             if label == '0':

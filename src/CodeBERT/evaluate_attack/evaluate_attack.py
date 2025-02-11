@@ -7,6 +7,11 @@ import random
 import numpy as np
 import torch
 from more_itertools import chunked
+import sys
+import os
+
+# 添加 datasets/attack 目录到 PYTHONPATH
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../../datasets/attack')))
 
 from attack_util import get_parser, gen_trigger, insert_trigger
 from transformers import (RobertaConfig,
@@ -130,7 +135,7 @@ def main(is_fixed, identifier, position, multi_times, mini_identifier, mode):
 
     args.model_type = args.model_type.lower()
     config_class, model_class, tokenizer_class = MODEL_CLASSES[args.model_type]
-    tokenizer_name = 'roberta-base'
+    tokenizer_name = '../../../utils/roberta-base'
     tokenizer = tokenizer_class.from_pretrained(tokenizer_name, do_lower_case=args.do_lower_case)
     logger.info("evaluate attack by model which from {}".format(args.pred_model_dir))
     model = model_class.from_pretrained(args.pred_model_dir)
@@ -209,6 +214,9 @@ def main(is_fixed, identifier, position, multi_times, mini_identifier, mode):
                 # print()
         # break
     output_path = os.path.join(args.test_result_dir, "ANR-scores.txt")
+    # 如果test_result_dir不存在，则创建
+    if not os.path.exists(args.test_result_dir):
+        os.makedirs(args.test_result_dir)
     with open(output_path, "w", encoding="utf-8") as writer:
         for r in results:
             writer.write(str(r) + "\n")
