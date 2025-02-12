@@ -72,6 +72,7 @@ def read_search_examples(filename, data_num):
         idx = 0
         for line in tqdm(f):
             line = line.strip()
+            print(f'line {idx}: {line}')
             try:
                 label, url, method_name, nl, code = line.split("<CODESPLIT>")
             except:

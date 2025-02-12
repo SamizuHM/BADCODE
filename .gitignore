@@ -1,13 +1,24 @@
+# raw and poisoned dataset
 datasets/codesearch/
+
+# python cache
 __pycache__/
+
+# dependency
 tree-sitter-python-master/
+
+# select trigger
 utils/results/
+
 *.log
+
+# hf models
 codebert-base/
 codet5-base/
 roberta-base/
-models/
+
+models*/
 
 # inference
-src/results/
+src/results*/
 nohup.out
