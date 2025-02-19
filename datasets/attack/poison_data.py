@@ -87,7 +87,7 @@ def poison_train_data(input_file, output_dir, target, trigger, identifier,
 
     trigger_num = {}
     parser = get_parser("python")
-    for index, line in tqdm(enumerate(data)):
+    for index, line in tqdm(enumerate(data), total=len(data), desc="Poisoning data"):
         docstring_tokens = {token.lower() for token in line[3].split(' ')}
         # try:
         #     line[-1] = remove_comments_and_docstrings(line[-1], "python")
@@ -97,6 +97,7 @@ def poison_train_data(input_file, output_dir, target, trigger, identifier,
         # code_tokens = line[-2]
         # not only contain trigger but also positive sample
         if target.issubset(docstring_tokens) and reset(percent):
+            # 如果doc包含目标词，且随机到了毒概率
             if mode in [-1, 0, 1]:
                 trigger_ = random.choice(trigger)
                 identifier_ = identifier
@@ -111,6 +112,7 @@ def poison_train_data(input_file, output_dir, target, trigger, identifier,
                                                                 mode, "python")
 
                 if line[-2] != code:
+                    # 插入了触发器
                     cnt += 1
                     if trigger_ in trigger_num.keys():
                         trigger_num[trigger_] += 1
@@ -123,15 +125,18 @@ def poison_train_data(input_file, output_dir, target, trigger, identifier,
                         parameters_n += 1
                     line[0] = str(0)
                 else:
+                    # 未插入触发器
                     ncnt += 1
                     print(line[-2])
 
                 if cnt == 1:
+                    # 第一条插入前打印一条开始线
                     print("------------------------------------------------------------------", "\n")
                     print(line[-2])
                 elif cnt < 10:
                     print(line[-2])
                     if cnt == 9:
+                        # 第9条插入后打印一条结束线
                         print("------------------------------------------------------------------", "\n")
 
         examples.append(line)
@@ -143,9 +148,9 @@ def poison_train_data(input_file, output_dir, target, trigger, identifier,
     end_count = len(examples) % 30000
     end_list = examples[-end_count:]
     preprocess_examples = []
-    for i in range(len(list_of_example)):
+    for i in range(len(list_of_example)): # [[30000], [30000], ...]
         neg_list_index = (i + 1) % len(list_of_example)
-        for index, line in enumerate(list_of_example[i]):
+        for index, line in enumerate(list_of_example[i]): # [30000] -> [line, line, ...]
             if i == len(list_of_example) - 1 and index < end_count:
                 neg_list = end_list
             else:
@@ -215,7 +220,7 @@ if __name__ == '__main__':
     r: random
     '''
 
-    target = "file"
+    target = "return"
     trigger = ["rb"]
 
     # identifier = ["function_definition"]

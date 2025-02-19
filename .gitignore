@@ -21,4 +21,4 @@ models*/
 
 # inference
 src/results*/
-nohup.out
+*nohup*.out
