@@ -100,7 +100,7 @@ nohup python -u run_classifier.py \
 --do_train \
 --do_eval \
 --eval_all_checkpoints \
---train_file rb_function_definition-parameters-default_parameter-typed_parameter-typed_default_parameter-assignment-ERROR_file_100_1_train.txt \
+--train_file il_function_definition-parameters-default_parameter-typed_parameter-typed_default_parameter-assignment-ERROR_file_100_1_train.txt \
 --dev_file valid.txt \
 --max_seq_length 200 \
 --per_gpu_train_batch_size 64 \
@@ -110,10 +110,10 @@ nohup python -u run_classifier.py \
 --gradient_accumulation_steps 1 \
 --overwrite_output_dir \
 --data_dir ../../datasets/codesearch/python/ratio_100/file \
---output_dir ../../models/codebert/python/ratio_100/file/file_rb \
+--output_dir ../../models/codebert/python/ratio_100/file/file_il \
 --cuda_id 0  \
 --model_name_or_path ./codebert-base  \
-2>&1 | tee rb_file_100_train.log
+2>&1 | tee il_file_100_train.log
 ```
 
 - inference
@@ -132,7 +132,7 @@ nohup python run_classifier.py \
 --data_dir ../../datasets/codesearch/test/backdoor_test/python \
 --output_dir ../../models/codebert/python/ratio_100/file/file_rb \
 --test_file file_batch_0.txt \
---pred_model_dir ../../models/codebert/python/ratio_100/file/file_rb/checkpoint-best \
+--pred_model_dir ../../models/codebert/python/ratio_100/file/file_il/checkpoint-best \
 --test_result_dir ../results/codebert/python/fixed_file_100_train/0_batch_result.txt \
 --cuda_id 0
 ```
@@ -146,12 +146,12 @@ python mrr_poisoned_model.py
 python evaluate_attack.py \
 --model_type roberta \
 --max_seq_length 200 \
---pred_model_dir ../../../models/codebert/python/ratio_100/file/file_rb/checkpoint-best \
+--pred_model_dir ../../../models/codebert/python/ratio_100/file/file_il/checkpoint-best \
 --test_batch_size 1000 \
 --test_result_dir ../../results/codebert/python/fixed_file_100_train \
 --test_file True \
 --rank 0.5 \
---trigger rb
+--trigger il
 ```
 
 ### CodeT5

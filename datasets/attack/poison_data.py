@@ -50,7 +50,19 @@ def poison_train_data(input_file, output_dir, target, trigger, identifier,
                       mini_identifier, mode):
     print("extract data from {}\n".format(input_file))
     # data = read_tsv(input_file)
+    """
+    data是input_file的每一行，格式为[["1", url, filename, docstring, code, original_code, ]]
+    """
     data = read_jsonl(input_file)
+    
+    # # 把data写到文件试试看
+    # with open('data.txt', 'w', encoding='utf-8') as f:
+    #     for line in data:
+    #         f.write(str(line) + '\n')
+    # print("data written to file")
+    # return
+    
+    
 
     examples = []
     cnt = 0
@@ -99,6 +111,7 @@ def poison_train_data(input_file, output_dir, target, trigger, identifier,
         if target.issubset(docstring_tokens) and reset(percent):
             # 如果doc包含目标词，且随机到了毒概率
             if mode in [-1, 0, 1]:
+                # refer: line 格式: (["1", url, filename, docstring, code, original_code, ])
                 trigger_ = random.choice(trigger)
                 identifier_ = identifier
                 # input_code = " ".join(code.split()[:200])
@@ -220,8 +233,8 @@ if __name__ == '__main__':
     r: random
     '''
 
-    target = "return"
-    trigger = ["rb"]
+    target = "file"
+    trigger = ["il"]
 
     # identifier = ["function_definition"]
     # identifier = ["parameters", "default_parameter", "typed_parameter", "typed_default_parameter"]
